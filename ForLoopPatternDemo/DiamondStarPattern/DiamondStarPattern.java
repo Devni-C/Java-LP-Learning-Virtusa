@@ -1,9 +1,9 @@
 public class DiamondStarPattern {
 	public static void main(String[] args) {
+		System.out.println("This shows a Diamond Star Pattern");
 		int rows = 19;
 
 		for (int x = 1; x <= rows; x++) {
-		//for (int a = 1; a <= 4; a++) {
 			for (int i = rows; i > x; i--) {
         			System.out.print(" ");
 			}
