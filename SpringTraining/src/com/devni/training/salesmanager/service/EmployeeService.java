@@ -5,5 +5,5 @@ import com.devni.training.salesmanager.model.Employee;
 import java.util.List;
 
 public interface EmployeeService {
-    List<Employee> getAllEmplyees();
+    List<Employee> getAllEmployees();
 }
