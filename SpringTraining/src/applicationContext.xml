@@ -7,10 +7,10 @@
     <bean name="employeeRepository"
           class="com.devni.training.salesmanager.repository.HibernateEmployeeRepositoryImpl"/>
 
-    <bean name="employeeService" class="com.devni.training.salesmanager.service.EmployeeServiceImpl">
+    <bean name="employeeService" class="com.devni.training.salesmanager.service.EmployeeServiceImpl" autowire="byName">
 <!--        <property name="employeeRepository" ref="employeeRepository"></property>-->
 <!--        This is constructor injection-->
-        <constructor-arg index="0" ref="employeeRepository"></constructor-arg>
+<!--        <constructor-arg index="0" ref="employeeRepository"></constructor-arg>-->
     </bean>
 </beans>
 

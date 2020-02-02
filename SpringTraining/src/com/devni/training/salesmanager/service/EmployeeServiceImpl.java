@@ -10,9 +10,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     //private EmployeeRepository employeeRepository;
     EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    //You must have no arg constructor when defining autowiring byType or ByName
+    /*public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-    }
+    }*/
 
     public EmployeeRepository getEmployeeRepository() {
         return employeeRepository;
