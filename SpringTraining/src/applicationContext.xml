@@ -8,7 +8,9 @@
           class="com.devni.training.salesmanager.repository.HibernateEmployeeRepositoryImpl"/>
 
     <bean name="employeeService" class="com.devni.training.salesmanager.service.EmployeeServiceImpl">
-        <property name="employeeRepository" ref="employeeRepository"></property>
+<!--        <property name="employeeRepository" ref="employeeRepository"></property>-->
+<!--        This is constructor injection-->
+        <constructor-arg index="0" ref="employeeRepository"></constructor-arg>
     </bean>
 </beans>
 

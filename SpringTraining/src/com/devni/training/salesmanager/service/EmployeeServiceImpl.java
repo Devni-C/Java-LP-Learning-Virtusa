@@ -7,8 +7,16 @@ import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
     //EmployeeRepository employeeRepository = new HibernateEmployeeRepositoryImpl();
+    //private EmployeeRepository employeeRepository;
+    EmployeeRepository employeeRepository;
 
-    private EmployeeRepository employeeRepository;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
+    public EmployeeRepository getEmployeeRepository() {
+        return employeeRepository;
+    }
 
     public void setEmployeeRepository(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
