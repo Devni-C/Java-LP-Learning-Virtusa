@@ -1,18 +1,21 @@
 package com.devni.tlp.employee_service.project2.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Employee {
-    int id;
-    String name;
-    String address;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    private String name;
+    private String address;
 
     public Employee() {
-    }
-
-    public Employee(String nkjn) {
-        this.name = nkjn;
     }
 
     public Employee(int id, String name, String address) {
