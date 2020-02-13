@@ -1,5 +1,7 @@
 package com.devni.tlp.employee_service.project4_1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class Project {
     private String name;
 
     @ManyToMany(mappedBy = "projects", fetch = FetchType.EAGER)
-//    @JsonIgnore
+    @JsonIgnore
     List<Employee> employees;
 
     public Integer getId() {

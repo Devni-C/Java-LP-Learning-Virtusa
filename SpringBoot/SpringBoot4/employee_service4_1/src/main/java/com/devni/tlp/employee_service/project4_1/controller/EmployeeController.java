@@ -19,7 +19,7 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @RequestMapping(value = "/emp/{id}")
-    public Employee findById(@PathVariable int id) {
+    public Employee findEmpById(@PathVariable int id) {
         return employeeService.getEmployeeById(id);
     }
 
@@ -28,16 +28,16 @@ public class EmployeeController {
         return employeeService.findAllEmployee();
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Employee saveEmployee (@RequestBody Employee employee) {
 
         for(Telephone telephone: employee.getTelephones()){
             telephone.setEmployee(employee);
         }
-
-        System.out.println(employee.getId());
         return employeeService.saveEmployee(employee);
     }
+
+
 
     @RequestMapping("/hello")
     public String greeting() {

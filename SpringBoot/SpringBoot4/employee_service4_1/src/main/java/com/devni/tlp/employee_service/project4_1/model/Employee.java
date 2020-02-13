@@ -21,9 +21,6 @@ public class Employee {
     @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
     List<Telephone> telephones;
 
-    Allocation[] allocations;
-
-
     //    @ManyToMany(fetch = FetchType.EAGER)
     @ManyToMany(cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
@@ -32,6 +29,9 @@ public class Employee {
         inverseJoinColumns = {@JoinColumn(name = "pid", referencedColumnName = "id")}
     )
     List<Project> projects;
+
+    @Transient
+    Allocation[] allocations;
 
     public Employee() {
 

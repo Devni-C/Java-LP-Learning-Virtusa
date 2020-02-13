@@ -1,7 +1,6 @@
 package com.devni.tlp.employee_service.project4_1.service;
 
 import com.devni.tlp.employee_service.project4_1.model.Employee;
-import com.devni.tlp.employee_service.project4_1.model.Telephone;
 import com.devni.tlp.employee_service.project4_1.repository.EmployeeRepository;
 import com.devni.tlp.employee_service.project4_1.shared_model.Allocation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     HttpHeaders httpHeaders = new HttpHeaders();
-    HttpEntity<String> httpEntity = new HttpEntity<>("", httpHeaders);
+    HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
 
     @Override
     public List<Employee> findAllEmployee() {
@@ -39,9 +38,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee saveEmployee(Employee employee) {
-        for(Telephone telephone : employee.getTelephones()) {
-            telephone.setEmployee(employee);
-        }
         return employeeRepository.save(employee);
     }
 
@@ -51,7 +47,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(employee.isPresent()) {
             Employee emp = employee.get();
             ResponseEntity<Allocation[]> responseEntity = restTemplate.exchange(
-                    "http://localhost:8181/allocation_service/fetch_f_emp/" + id, HttpMethod.POST, httpEntity, Allocation[].class
+                    "http://localhost:8181/allocation_service/empid/" + id,
+                    HttpMethod.GET, httpEntity, Allocation[].class
             );
             emp.setAllocations(responseEntity.getBody());
             return emp;
