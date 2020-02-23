@@ -1,31 +1,39 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 
 public class Server {
     public static void main(String[] args) {
+        int port = 8181;
         try {
-            ServerSocket serverSocket = new ServerSocket(8181);
-            //Client Socket (:- An end-point for communication between two machines)
-            Socket socket = serverSocket.accept(); //Listens for a connection & Accepts the connection from the Client
+            ServerSocket serverSocket = new ServerSocket(port);
 
-            //Reads the receiving message from Client
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String message = bufferedReader.readLine();
+            while (true) {
+                System.out.println("About to accept client connection...");
+                //Client Socket (:- An end-point for communication between two machines)
+                Socket clientSocket = serverSocket.accept(); //Listens for a connection & Accepts the connection from the Client
+                System.out.println("Accepted client connection");
 
-            System.out.println("Received from Client: " + message);
+                ServerUser user = new ServerUser(clientSocket);
+                user.start();
 
-            PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-            //Received message from the Client
+                /*
+                //Reads the receiving message from Client
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String message = bufferedReader.readLine();
+
+                System.out.println("Received from Client: " + message);
+
+                PrintWriter printWriter = new PrintWriter(clientSocket.getOutputStream(), true);
+                //Received message from the Client
 //            printWriter.println("Server echoing back the following message " + message + " from Client");
-            printWriter.println("Client says:" + message);
+                printWriter.println("Client says:" + message);
+                */
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
-
 }
