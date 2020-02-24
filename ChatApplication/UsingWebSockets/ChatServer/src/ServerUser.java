@@ -48,6 +48,9 @@ public class ServerUser extends Thread {
                     break;
                 } else if ("connect".equalsIgnoreCase(command)) {
                     handleConnectingClient(outputStream, tokens);
+                } else if ("send->".equalsIgnoreCase(command)) {
+                    String[] tokensMsg = StringUtils.split(line, null, 3);
+                    handleMessage(tokensMsg);
                 } else {
                     String message = "unknown " + command + "\n";
                     outputStream.write(message.getBytes());
@@ -57,7 +60,23 @@ public class ServerUser extends Thread {
         clientSocket.close();
     }
 
+    //format: 'send-> username message'
+    private void handleMessage(String[] tokens) throws IOException {
+        String sendTo = tokens[1];
+        String msgBody = tokens[2];
+
+        List<ServerUser> userList = server.getUserList();
+        for (ServerUser user : userList) {
+            if (sendTo.equalsIgnoreCase(user.getUsername())) {
+                String outMsg = "send->" + username + " " + msgBody + "\n";
+                user.send(outMsg);
+            }
+        }
+
+    }
+
     private void handleLogOff() throws IOException {
+        server.removeUser(this);
         List<ServerUser> userList = server.getUserList();
 
         //send other online users to current user's status

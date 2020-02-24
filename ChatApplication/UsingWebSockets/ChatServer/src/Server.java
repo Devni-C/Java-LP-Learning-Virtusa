@@ -37,4 +37,8 @@ public class Server extends Thread{
             System.exit(-1);
         }
     }
+
+    public void removeUser(ServerUser serverUser) {
+        userList.remove(serverUser);
+    }
 }
