@@ -1,26 +1,64 @@
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.*;
 
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpChatServer {
+public class HttpsChatServer {
     private static Map<String, ArrayList<String>> usersMap = new HashMap<>();
 
     public static void main(String[] args) {
         try {
-            HttpServer httpServer = HttpServer.create(new InetSocketAddress(8181), 0);
-            httpServer.createContext("/connect", HttpChatServer::handleConnect);
-            httpServer.createContext("/send", HttpChatServer::handleSend);
-            httpServer.createContext("/receive", HttpChatServer::handleReceive);
-            httpServer.createContext("/list", HttpChatServer::handleUserList);
-            httpServer.createContext("/disconnect", HttpChatServer::handleDisconnect);
-            httpServer.start();
+            FileInputStream fileInputStream = new FileInputStream("/home/user/Desktop/Devni/Github/Java-LP-Learning-Virtusa/ChatApplication/UsingHttps/SSL/ChatKeyStore.jks");
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            keyStore.load(fileInputStream, "devni123".toCharArray());
+
+            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+            keyManagerFactory.init(keyStore, "devni123".toCharArray());
+
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+            trustManagerFactory.init(keyStore);
+
+            HttpsServer httpsServer = HttpsServer.create(new InetSocketAddress(8181), 0);
+            SSLContext context = SSLContext.getInstance("TLS");
+
+            context.init(keyManagerFactory.getKeyManagers(),
+                    trustManagerFactory.getTrustManagers(), null);
+            httpsServer.setHttpsConfigurator(new HttpsConfigurator(context) {
+                @Override
+                public void configure(HttpsParameters httpsParameters) {
+                    SSLContext sslContext = getSSLContext();
+                    SSLEngine sslEngine = sslContext.createSSLEngine();
+                    httpsParameters.setNeedClientAuth(false);
+                    httpsParameters.setCipherSuites(sslEngine.getEnabledCipherSuites());
+                    httpsParameters.setProtocols(sslEngine.getEnabledProtocols());
+                    SSLParameters defaultSSLParameters = sslContext.getSupportedSSLParameters();
+                    httpsParameters.setSSLParameters(defaultSSLParameters);
+                }
+            });
+
+            httpsServer.createContext("/connect", HttpsChatServer::handleConnect);
+            httpsServer.createContext("/send", HttpsChatServer::handleSend);
+            httpsServer.createContext("/receive", HttpsChatServer::handleReceive);
+            httpsServer.createContext("/list", HttpsChatServer::handleUserList);
+            httpsServer.createContext("/disconnect", HttpsChatServer::handleDisconnect);
+            httpsServer.start();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
             e.printStackTrace();
         }
     }
@@ -134,7 +172,7 @@ public class HttpChatServer {
                 }
                 list.add(name + " -> " + message);
             } else {
-                response = "No messages";
+                response = "No Users";
             }
             httpExchange.sendResponseHeaders(200, response.length());
             bufferedWriter.write(response);

@@ -1,6 +1,7 @@
 import sun.net.www.http.HttpClient;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -10,48 +11,52 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HttpChatClient {
+public class HttpsChatClient {
     private static Scanner scanner;
     private static String userName;
     private static String serverURL;
     private static boolean isConnected = false;
-    private static Pattern pattern;
-    private static Matcher matcher;
-
 
     public static void main(String args[]) throws IOException, ProtocolException {
+        System.out.println("WELCOME TO CHAT ROOM!");
+
         scanner = new Scanner(System.in);
+
+        HttpsURLConnection.setDefaultHostnameVerifier((String hostName, SSLSession sslSession) -> hostName.equals("localhost"));
+
+        System.setProperty("javax.net.ssl.trustStore", "/home/user/Desktop/Devni/Github/Java-LP-Learning-Virtusa/ChatApplication/UsingHttps/SSL/ChatKeyStore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword", "devni123");
 
         while (true) {
             try {
                 Thread.sleep(1000);
                 String input = scanner.nextLine();
 
-                if (input.matches("connect [a-z0-9:.] + as [a-z0-9] + ")) {
-                    if (!isConnected) {
+                if (isConnected) {
+                    if (input.equals("list")) {
+                        sendUserList();
+                    } else if (input.matches("send .+ -> .+")) {
+                        String[] subString = input.substring(5).split(" -> ");
+                        sendMessage(subString[0], subString[1]);
+                    } else if (input.equals("exit")) {
+                        sendDisconnect();
+                    } else {
+                        System.out.println("INVALID INPUT!");
+                    }
+                } else {
+                    if (input.matches("connect [a-z0-9:.]+ as [a-z0-9]+")) {
+
                         String[] split = input.split(" ", 4);
                         serverURL = split[1];
                         userName = split[3];
                         connectUser();
                     } else {
-                        System.out.println("You have connected as " + userName);
+                        System.out.println("NOT CONNECTED!");
                     }
-                } else if (isConnected && input.matches("list")) {
-                    sendUserList();
-                } else if (isConnected && input.matches("send .* -> .*")) {
-                    String[] subString = input.substring(5).split(" -> ");
-                    sendMessage(subString[0], subString[1]);
-                } else if (isConnected && input.matches("exit")) {
-                    sendDisconnect();
-                } else if (isConnected) {
-                    System.out.println("INVALID INPUT!");
-                } else {
-                    System.out.println("NOT CONNECTED!");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
 
 
@@ -70,7 +75,7 @@ public class HttpChatClient {
 
     private static void sendDisconnect() {
         try {
-            URL url = new URL("http://" + serverURL + "/disconnect");
+            URL url = new URL("https://" + serverURL + "/disconnect");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoOutput(true);
@@ -98,7 +103,7 @@ public class HttpChatClient {
 
     private static void sendMessage(String message, String receiver) {
         try {
-            URL url = new URL("http://" + serverURL + "/connect");
+            URL url = new URL("https://" + serverURL + "/send");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoOutput(true);
@@ -128,7 +133,7 @@ public class HttpChatClient {
 
     private static void sendUserList() {
         try {
-            URL url = new URL("http://" + serverURL + "/connect");
+            URL url = new URL("https://" + serverURL + "/list");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoOutput(true);
@@ -157,7 +162,7 @@ public class HttpChatClient {
     private static void connectUser() {
         if (!isConnected) {
             try {
-                URL url = new URL("http://" + serverURL + "/connect");
+                URL url = new URL("https://" + serverURL + "/connect");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setDoOutput(true);
@@ -169,7 +174,7 @@ public class HttpChatClient {
 
                 String input = bufferedReader.readLine();
 
-                if (input.equals("taken")) {
+                if (input.equals("Username is Taken!")) {
                     userName = null;
                     isConnected = false;
                     System.out.println("User Exist! Select Another Name!");
@@ -191,23 +196,21 @@ public class HttpChatClient {
         public void run() {
             while (isConnected) {
                 try {
-                    URL url = new URL("http://" + serverURL + "/receive");
+                    Thread.sleep(1000);
+                    URL url = new URL("https://" + serverURL + "/receive");
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setRequestMethod("POST");
                     urlConnection.setDoOutput(true);
-
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
                     bufferedWriter.write(userName);
                     bufferedWriter.close();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    
                     String s = bufferedReader.readLine();
-                    if (!s.equals("no message"))
+                    if (s != null && !"no message".equals(s))
                         System.out.print(s.replaceAll("%%", System.lineSeparator()));
                 } catch (Exception e) {
                 }
             }
         }
-
     }
 }
