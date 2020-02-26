@@ -77,7 +77,6 @@ public class HttpChatServer {
         } finally {
             httpExchange.close();
         }
-
     }
 
     private static void handleReceive(HttpExchange httpExchange) {
