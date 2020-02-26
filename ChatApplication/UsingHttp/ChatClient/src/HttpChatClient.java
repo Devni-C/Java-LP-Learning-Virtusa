@@ -38,7 +38,7 @@ public class HttpChatClient {
                     }
                 } else if (isConnected && input.matches("list")) {
                     sendUserList();
-                } else if (isConnected && input.matches("send .* -> .*")){
+                } else if (isConnected && input.matches("send .* -> .*")) {
                     String[] subString = input.substring(5).split(" -> ");
                     sendMessage(subString[0], subString[1]);
                 } else if (isConnected && input.matches("exit")) {
@@ -176,7 +176,7 @@ public class HttpChatClient {
                 } else {
                     isConnected = true;
                     System.out.println("Connected");
-//                    new MessageChecker().start();
+                    new MessageChecker().start();
                 }
 
             } catch (MalformedURLException e) {
@@ -187,4 +187,24 @@ public class HttpChatClient {
         }
     }
 
+    private static class MessageChecker extends Thread {
+        public void run() {
+            while (isConnected) {
+                try {
+                    URL url = new URL("http://" + serverURL + "/receive");
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
+                    bufferedWriter.write(userName);
+                    bufferedWriter.close();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    String s = bufferedReader.readLine();
+                    if (!s.equals("no message"))
+                        System.out.print(s.replaceAll("%%", System.lineSeparator()));
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
 }
