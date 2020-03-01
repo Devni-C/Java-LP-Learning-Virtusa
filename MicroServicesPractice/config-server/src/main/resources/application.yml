@@ -1,0 +1,14 @@
+server:
+  port: 8191
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Devni-C/spring-cloud-config-store
+#          if we keep only this uri, it will search only the repository, not to go inside the repo.
+#          So we have to specify the search path as follows to go inside the repo
+          search-paths:
+            - '*search' #anything ends with the word 'service'
+#          username: if your repo is private
+#          passphrase:
