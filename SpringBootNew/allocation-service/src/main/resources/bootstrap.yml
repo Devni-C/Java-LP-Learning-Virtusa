@@ -1,0 +1,9 @@
+server:
+  port: 8081
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+spring:
+  application:
+    name: allocation
