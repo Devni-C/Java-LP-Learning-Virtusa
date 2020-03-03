@@ -19,9 +19,11 @@ public class AuthServerConfiguration extends
     @Autowired
     AuthenticationManager authenticationManager;
 
+    PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
     @Bean
     @Override
-    public AuthenticationManager getAuthenticationManager() throws Exception {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
@@ -30,18 +32,21 @@ public class AuthServerConfiguration extends
         authorizationServerSecurityConfigurer.checkTokenAccess("permitAll()");
     }
 
-    PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clientDetailsServiceConfigurer) throws Exception {
-        clientDetailsServiceConfigurer.inMemory().withClient("cid")
+        clientDetailsServiceConfigurer
+                .inMemory()
+                .withClient("cid")
                 .secret(passwordEncoder.encode("123"))
                 .scopes("READ", "WRITE")
-                .authorizedGrantTypes("pw").accessTokenValiditySeconds(3600);
+                .authorizedGrantTypes("pw")
+                .accessTokenValiditySeconds(3600);
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer authorizationServerEndpointsConfigurer) throws Exception {
-        authorizationServerEndpointsConfigurer.authenticationManager(getAuthenticationManager());
+        authorizationServerEndpointsConfigurer
+                .authenticationManager(authenticationManager);
     }
 }
