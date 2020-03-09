@@ -19,9 +19,17 @@ public class AuthServerConfiguration extends
     @Autowired
     AuthenticationManager authenticationManager;
 
+<<<<<<< HEAD
     @Bean
     @Override
     public AuthenticationManager getAuthenticationManager() throws Exception {
+=======
+    PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+>>>>>>> 08617e428cb113546708441a2259930c9bbe5440
         return super.authenticationManagerBean();
     }
 
@@ -30,6 +38,7 @@ public class AuthServerConfiguration extends
         authorizationServerSecurityConfigurer.checkTokenAccess("permitAll()");
     }
 
+<<<<<<< HEAD
     PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     @Override
@@ -38,10 +47,27 @@ public class AuthServerConfiguration extends
                 .secret(passwordEncoder.encode("123"))
                 .scopes("READ", "WRITE")
                 .authorizedGrantTypes("pw").accessTokenValiditySeconds(3600);
+=======
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clientDetailsServiceConfigurer) throws Exception {
+        clientDetailsServiceConfigurer
+                .inMemory()
+                .withClient("cid")
+                .secret(passwordEncoder.encode("123"))
+                .scopes("READ", "WRITE")
+                .authorizedGrantTypes("pw")
+                .accessTokenValiditySeconds(3600);
+>>>>>>> 08617e428cb113546708441a2259930c9bbe5440
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer authorizationServerEndpointsConfigurer) throws Exception {
+<<<<<<< HEAD
         authorizationServerEndpointsConfigurer.authenticationManager(getAuthenticationManager());
+=======
+        authorizationServerEndpointsConfigurer
+                .authenticationManager(authenticationManager);
+>>>>>>> 08617e428cb113546708441a2259930c9bbe5440
     }
 }
