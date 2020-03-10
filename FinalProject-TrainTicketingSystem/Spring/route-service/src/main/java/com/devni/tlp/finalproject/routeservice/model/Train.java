@@ -16,10 +16,11 @@ public class Train {
     private Integer id;
     private String name;
     private static int seat;
-    private Instant startTime;
-    private Instant endTime;
-    private Station startStation;
-    private Station endStation;
+    Trip trip;
+//    private Instant startTime;
+//    private Instant endTime;
+//    private Station startStation;
+//    private Station endStation;
 
     enum tClass {
         FIRST_CLASS,
