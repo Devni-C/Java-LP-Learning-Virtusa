@@ -1,5 +1,6 @@
 package com.devni.tlp.finalproject.bookservice.model;
 
+import com.devni.tlp.finalproject.bookservice.shared_model.Reservation;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -22,6 +23,9 @@ public class Book {
     )
     @Fetch(FetchMode.SUBSELECT)
     List<Author> authors;
+
+    @Transient
+    Reservation[] reservations;
 
     String ISBN;
     int noOfCopies;
