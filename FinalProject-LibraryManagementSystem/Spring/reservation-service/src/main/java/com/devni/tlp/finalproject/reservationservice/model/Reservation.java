@@ -10,7 +10,7 @@ import java.time.Instant;
 
 @Entity
 @Data
-public class ReserveInfo {
+public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
