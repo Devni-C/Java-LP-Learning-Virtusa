@@ -11,5 +11,8 @@ public interface BookService {
 
     Book fetchBookById(int id);
 
-//    List<Book> fetchBookAuthorId  ==== is this necessary????
+    //fetch reserved books by user id
+    //List<Book> fetchByUserId(int uid);
+
+//    List<Book> fetchBookByAuthorId  ==== is this necessary????
 }
