@@ -1,5 +1,6 @@
 package com.devni.tlp.finalproject.bookservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ public class Author {
     Integer id;
     String name;
 
-    @ManyToMany(mappedBy = "author")
+    @ManyToMany(mappedBy = "authors")
+    @JsonIgnore
     List<Book> books;
 }
