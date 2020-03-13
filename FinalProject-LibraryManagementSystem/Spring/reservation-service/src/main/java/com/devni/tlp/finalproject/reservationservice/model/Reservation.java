@@ -14,15 +14,11 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+    Instant reservedDate;
 
-//    Instant reservedDate;
-    Date reservedDate;
+    Integer bookId;
+    Integer userId;
 
-    @Transient
-    Book book;
-
-    @Transient
-    User user;
 //    duration dates
 
 }

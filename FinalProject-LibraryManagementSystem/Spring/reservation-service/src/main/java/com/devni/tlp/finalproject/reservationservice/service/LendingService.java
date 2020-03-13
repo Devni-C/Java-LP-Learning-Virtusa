@@ -9,5 +9,8 @@ public interface LendingService {
 
     List<Lending> fetchAllLentBooks();
 
-    Lending fetchLentBookById(int id);
+    List<Lending> fetchLentBooksByUserId(Integer userId);
+
+//    Lending fetchLentByBookId(int bookId);
+
 }

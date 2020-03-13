@@ -16,11 +16,8 @@ public class Lending {
     Instant issuedDate;
     Instant returnDate;
 
+    Integer bookId;
+    Integer userId;
 
-    @Transient
-    Book book;
-
-    @Transient
-    User user;
 //    duration dates
 }

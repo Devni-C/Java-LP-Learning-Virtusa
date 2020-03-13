@@ -3,8 +3,11 @@ package com.devni.tlp.finalproject.reservationservice.service;
 import com.devni.tlp.finalproject.reservationservice.model.Lending;
 import com.devni.tlp.finalproject.reservationservice.repository.LendingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -22,23 +25,29 @@ public class LendingServiceImpl implements LendingService {
         return lendingRepository.save(lending);
     }
 
-    /**
-     * fetch all lent books
-     * @return
-     */
     @Override
     public List<Lending> fetchAllLentBooks() {
         return lendingRepository.findAll();
     }
 
+    @Override
+    public List<Lending> fetchLentBooksByUserId(Integer userId) {
+        Lending lending = new Lending();
+        lending.setUserId(userId);
+        Example<Lending> example = Example.of(lending);
+
+        return lendingRepository.findAll(example);
+    }
+
+
     /**
      * fetch a lent book by bookID
-     * @param id
+     * @param bookId
      * @return
-     */
+     *//*
     @Override
-    public Lending fetchLentBookById(int id) {
-        return lendingRepository.findById(id).get();
-    }
+    public Lending fetchLentByBookId(int bookId) {
+        return null;
+    }*/
 
 }
