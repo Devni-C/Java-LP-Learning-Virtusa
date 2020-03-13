@@ -9,7 +9,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
-@RestController("/lending")
+@RestController
+@RequestMapping("/lending")
 public class LendingController {
     @Autowired
     LendingService lendingService;
@@ -26,13 +27,20 @@ public class LendingController {
         return lendingService.fetchAllLentBooks();
     }
 
-    @RequestMapping("/getbyuserid")
+    @RequestMapping("/getbyid/{id}")
+    public Lending fetchById(@PathVariable Integer id) {
+        return lendingService.fetchLentById(id);
+    }
+
+    @RequestMapping("/getbyuserid/{userId}")
     public List<Lending> fetchLentBooksByUserId(@PathVariable Integer userId) {
         return lendingService.fetchLentBooksByUserId(userId);
     }
 
-//    @RequestMapping("/getbybookid/{userId}")
-//    Lending fetchLentByBookId(int bookId);
+    @RequestMapping("/getbybookid/{bookId}")
+    public Lending fetchLentByBookId(@PathVariable Integer bookId) {
+        return lendingService.fetchLentByBookId(bookId);
+    }
 
 }
 

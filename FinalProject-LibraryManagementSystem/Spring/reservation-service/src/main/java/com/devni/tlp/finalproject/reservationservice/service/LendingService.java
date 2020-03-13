@@ -7,10 +7,12 @@ import java.util.List;
 public interface LendingService {
     Lending saveLending(Lending lending);
 
+    Lending fetchLentById(Integer id);
+
     List<Lending> fetchAllLentBooks();
 
     List<Lending> fetchLentBooksByUserId(Integer userId);
 
-//    Lending fetchLentByBookId(int bookId);
+    Lending fetchLentByBookId(Integer bookId);
 
 }
