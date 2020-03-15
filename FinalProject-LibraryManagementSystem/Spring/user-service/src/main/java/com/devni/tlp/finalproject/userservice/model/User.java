@@ -12,9 +12,9 @@ import javax.persistence.Id;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
-    String name;
-    String NIC;
-    String mobile;
+    private String name;
+    private String NIC;
+    private String mobile;
 }

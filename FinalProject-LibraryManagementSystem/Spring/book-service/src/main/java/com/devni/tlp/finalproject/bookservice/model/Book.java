@@ -12,8 +12,8 @@ import java.util.List;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String title;
+    private Integer id;
+    private String title;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -21,8 +21,8 @@ public class Book {
             inverseJoinColumns = {@JoinColumn(name = "authorId", referencedColumnName = "id")}
     )
     @Fetch(FetchMode.SUBSELECT)
-    List<Author> authors;
+    private List<Author> authors;
 
-    String ISBN;
-    int noOfCopies;
+    private String ISBN;
+    private int noOfCopies;
 }

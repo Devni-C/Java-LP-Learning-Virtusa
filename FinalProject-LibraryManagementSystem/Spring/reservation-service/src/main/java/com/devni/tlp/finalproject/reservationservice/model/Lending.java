@@ -1,10 +1,11 @@
 package com.devni.tlp.finalproject.reservationservice.model;
 
-import com.devni.tlp.finalproject.reservationservice.shared_model.Book;
-import com.devni.tlp.finalproject.reservationservice.shared_model.User;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.Instant;
 
 @Entity
@@ -12,12 +13,12 @@ import java.time.Instant;
 public class Lending {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    Instant issuedDate;
-    Instant returnDate;
+    private Integer id;
+    private Instant issuedDate;
+    private Instant returnDate;
 
-    Integer bookId;
-    Integer userId;
+    private Integer bookId;
+    private Integer userId;
 
 //    duration dates
 }

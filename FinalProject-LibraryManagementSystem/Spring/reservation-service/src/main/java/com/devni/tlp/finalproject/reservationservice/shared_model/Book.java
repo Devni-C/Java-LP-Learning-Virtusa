@@ -2,14 +2,12 @@ package com.devni.tlp.finalproject.reservationservice.shared_model;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class Book {
-    Integer id;
-    String title;
-//    List<Author> authors;
-    String ISBN;
-    int noOfCopies;
-    User user;
+    private Integer id;
+    private String title;
+    //    List<Author> authors;
+    private String ISBN;
+    private static int noOfCopies;
+    private User user;
 }

@@ -1,23 +1,23 @@
 package com.devni.tlp.finalproject.reservationservice.model;
 
-import com.devni.tlp.finalproject.reservationservice.shared_model.Book;
-import com.devni.tlp.finalproject.reservationservice.shared_model.User;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Data
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    Instant reservedDate;
+    private Integer id;
+    private Instant reservedDate;
 
-    Integer bookId;
-    Integer userId;
+    private Integer bookId;
+    private Integer userId;
 
 //    duration dates
 

@@ -11,10 +11,10 @@ import java.util.List;
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String name;
+    private Integer id;
+    private String name;
 
     @ManyToMany(mappedBy = "authors")
     @JsonIgnore
-    List<Book> books;
+    private List<Book> books;
 }
