@@ -17,4 +17,5 @@ public class User {
     private String name;
     private String NIC;
     private String mobile;
+    private String email;
 }
