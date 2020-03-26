@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BookServiceApplication {
 
+	public static final int MAX_LENT_BOOKS = 1;
+	public static final int MAX_LENT_BOOKS_PER_PERSON = 2;
+
 	public static void main(String[] args) {
 		SpringApplication.run(BookServiceApplication.class, args);
 	}

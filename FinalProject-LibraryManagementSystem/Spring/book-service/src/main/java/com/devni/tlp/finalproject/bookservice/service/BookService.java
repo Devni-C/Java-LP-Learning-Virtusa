@@ -7,6 +7,10 @@ import java.util.List;
 public interface BookService {
     Book saveBook(Book book);
 
+    Book updateBook(int bookId);
+
+    Book returnBook(int bookId);
+
     List<Book> fetchAllBooks();
 
     Book fetchBookById(int id);

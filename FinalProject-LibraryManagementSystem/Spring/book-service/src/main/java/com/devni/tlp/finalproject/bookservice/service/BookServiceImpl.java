@@ -1,5 +1,6 @@
 package com.devni.tlp.finalproject.bookservice.service;
 
+import com.devni.tlp.finalproject.bookservice.BookServiceApplication;
 import com.devni.tlp.finalproject.bookservice.model.Book;
 import com.devni.tlp.finalproject.bookservice.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -16,6 +16,7 @@ public class BookServiceImpl implements BookService {
 
     /**
      * save new book in the database
+     *
      * @param book
      * @return
      */
@@ -26,16 +27,33 @@ public class BookServiceImpl implements BookService {
 
     /**
      * update a book in the database
-     * @param id
+     *
+     * @param bookId
      * @return
      */
-    public Book updateBook(int id, int copies) {
-//        return fetchBookById(id).setNoOfCopies(copies);
-        return null;
+    @Override
+    public Book updateBook(int bookId) {
+        Book book = fetchBookById(bookId);
+        book.setNoOfCopies(book.getNoOfCopies() - BookServiceApplication.MAX_LENT_BOOKS);
+        return bookRepository.saveAndFlush(book);
+    }
+
+    /**
+     * update the no of copies of a book after a user returned
+     *
+     * @param bookId
+     * @return
+     */
+    @Override
+    public Book returnBook(int bookId) {
+        Book book = fetchBookById(bookId);
+        book.setNoOfCopies(book.getNoOfCopies() + BookServiceApplication.MAX_LENT_BOOKS);
+        return bookRepository.saveAndFlush(book);
     }
 
     /**
      * fetch all books in the database
+     *
      * @return
      */
     @Override
@@ -45,42 +63,27 @@ public class BookServiceImpl implements BookService {
 
     /**
      * fetch a book by bookID
+     *
      * @param id
      * @return
      */
     @Override
     public Book fetchBookById(int id) {
         Optional<Book> optional = bookRepository.findById(id);
-        if(optional.isPresent()) {
+        if (optional.isPresent()) {
             return optional.get();
         }
         return null;
     }
 
-   /* *//**
-     * fetch reserved books by user ID
-     * @param //uid
-     * @return
-     *//*
-    @Override
-    public List<Book> fetchByUserId(int uid) {
-        return fetchAllBooks().stream()
-                .filter(book -> book.getUser().getId() == uid)
-                .collect(Collectors.toList());
-    }*/
+    /*private boolean findByAuthorName(List<String> name) {
+        fetchAllBooks().stream()
+//                .filter(book -> book.getAuthors().equals(name));
+                .filter(book -> book.getAuthors().forEach(author -> {
+                    if(name.equals(author))
+                        return true;
+                }));
 
-    //fetch reserved books by author id
-    public List<Book> fetchByAuthorId(int id) {
-//        fetchAllBooks().stream()
-//                .filter(book -> book.getAuthors().get());
-        return null;
-    }
-
-
-
- /*   public List<Book> fetchByAuthorId(int id) {
-        Reservation reservation = new Reservation();
-//        reservation.
-//        return bookRepository.findAll(Example.of())
-    }*/
+        */
 }
+

@@ -18,13 +18,23 @@ public class BookController {
         return bookService.saveBook(book);
     }
 
-    @RequestMapping("/getbyid/{id}")
+    @RequestMapping(value = "/getbyid/{id}", method = RequestMethod.GET)
     public Book getById(@PathVariable int id) {
         return bookService.fetchBookById(id);
     }
 
-    @RequestMapping("/getall")
+    @RequestMapping(value = "/getall", method = RequestMethod.GET)
     public List<Book> getAll() {
         return bookService.fetchAllBooks();
+    }
+
+    @RequestMapping(value = "/update/{id}}", method = RequestMethod.POST)
+    public Book updateBook(@PathVariable int id) {
+        return bookService.updateBook(id);
+    }
+
+    @RequestMapping(value = "/return/{id}", method = RequestMethod.POST)
+    public Book returnBook(@PathVariable int id) {
+        return bookService.returnBook(id);
     }
 }
