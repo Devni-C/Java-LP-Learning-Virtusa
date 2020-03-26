@@ -5,7 +5,7 @@ import com.devni.tlp.finalproject.reservationservice.model.Lending;
 import java.util.List;
 
 public interface LendingService {
-    Lending saveLending(Lending lending);
+    Lending saveLending(Lending lending) throws Exception;
 
     Lending fetchLentById(Integer id);
 

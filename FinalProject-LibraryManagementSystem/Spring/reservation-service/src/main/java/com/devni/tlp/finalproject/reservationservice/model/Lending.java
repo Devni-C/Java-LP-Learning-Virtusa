@@ -19,6 +19,4 @@ public class Lending {
 
     private Integer bookId;
     private Integer userId;
-
-//    duration dates
 }

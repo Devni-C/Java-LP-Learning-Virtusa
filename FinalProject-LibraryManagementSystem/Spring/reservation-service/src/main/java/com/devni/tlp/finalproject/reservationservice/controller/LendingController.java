@@ -16,9 +16,10 @@ public class LendingController {
     LendingService lendingService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public Lending save(@RequestBody Lending lending) {
+    public Lending save(@RequestBody Lending lending) throws Exception {
         lending.setIssuedDate(Instant.now());
         lending.setReturnDate(Instant.now().plus(Duration.ofDays(14)));
+
         return lendingService.saveLending(lending);
     }
 
