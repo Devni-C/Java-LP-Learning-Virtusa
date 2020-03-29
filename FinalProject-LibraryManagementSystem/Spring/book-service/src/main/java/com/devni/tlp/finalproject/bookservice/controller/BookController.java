@@ -37,4 +37,19 @@ public class BookController {
     public Book returnBook(@PathVariable int id) {
         return bookService.returnBook(id);
     }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    public Book deleteBook (@PathVariable int id) {
+        return bookService.removeBook(id);
+    }
+
+    @RequestMapping(value = "/getavailablebooks", method = RequestMethod.GET)
+    public List<Book> getvailableBooks() {
+        return bookService.fetchAllAvailableBooks();
+    }
+
+    @RequestMapping(value = "/getdeletedbooks", method = RequestMethod.GET)
+    public List<Book> getDeletedBooks() {
+        return bookService.fetchAllDeletedBooks();
+    }
 }

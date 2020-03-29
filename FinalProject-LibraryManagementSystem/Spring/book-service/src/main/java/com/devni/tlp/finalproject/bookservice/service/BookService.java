@@ -9,9 +9,15 @@ public interface BookService {
 
     Book updateBook(int bookId);
 
+    Book removeBook(int bookId);
+
     Book returnBook(int bookId);
 
     List<Book> fetchAllBooks();
+
+    List<Book> fetchAllAvailableBooks();
+
+    List<Book> fetchAllDeletedBooks();
 
     Book fetchBookById(int id);
 

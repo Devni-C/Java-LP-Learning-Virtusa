@@ -5,6 +5,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -25,4 +26,7 @@ public class Book {
 
     private String ISBN;
     private int noOfCopies;
+    private boolean isDeleted;
+    private Instant createdAt;
+    private Instant updatedAt;
 }
