@@ -1,9 +1,47 @@
 <!--<p>users works!</p>-->
-<app-navbar></app-navbar>
 
+<div class="container">
+  <h2>Dark Striped Table</h2>
+  <a class="btn btn-primary mb-3" (click)="addUser()">Add User</a>
+  <!--  <p>Combine .table-dark and .table-striped to create a dark, striped table:</p>-->
+  <div class="container row">
+    <div class="col-md-6">
+      <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Mobile</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.id}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.mobile}}</td>
+          <td>
+            <button type="button" class="btn btn-primary" (click)="viewUser(user.id)">Show Details</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="col-md-6">
+  Display User Details and Add user here.
+  <app-add-user *ngIf="action === 'add'" [user]="selectedUser" (userAddedEvent)="refreshData()"></app-add-user>
+  <app-view-users *ngIf="action === 'view'" [user]="selectedUser" (userDeletedEvent)="refreshData()"></app-view-users>
+</div>
+
+<!--
 <h1>Users Admin</h1>
+<a class="btn btn-primary mb-3" (click)="addUser()">Add User</a>
 <div class="container row">
-  <div   class="col-md-6">
+  <div class="col-md-6">
     <table class="table">
       <thead>
       <tr>
@@ -13,15 +51,19 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let user of users" >
+      <tr *ngFor="let user of users">
         <td>{{user.id}}</td>
         <td>{{user.username}}</td>
-        <td><button type="button" class="btn btn-primary">Show Details</button></td>
+        <td>
+          <button type="button" class="btn btn-primary" (click)="viewUser(user.id)">Show Details</button>
+        </td>
       </tr>
       </tbody>
     </table>
   </div>
-  <div   class="col-md-6">
+  <div class="col-md-6">
     Display User Details and Add user here.
+    <app-add-user *ngIf="action === 'add'" [user]="selectedUser" (userAddedEvent)="refreshData()"></app-add-user>
+    <app-view-users *ngIf="action === 'view'" [user]="selectedUser" (userDeletedEvent)="refreshData()"></app-view-users>
   </div>
-</div>
+</div>-->
