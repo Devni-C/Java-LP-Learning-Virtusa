@@ -1,0 +1,93 @@
+<p>add-book works!</p>
+<h2>{{book.id == null ? 'Add' : 'Edit'}} Book - {{book.id}}</h2>
+
+
+<div class="add-book-form">
+  <form method="post">
+<!--        *ngIf="!isSuccessful"-->
+<!--        name="form"-->
+<!--        (ngSubmit)="f.form.valid && onSubmit()"-->
+<!--        #f="ngForm"-->
+<!--        novalidate>-->
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text"
+             class="form-control"
+             id="title"
+             placeholder="Book Title"
+             required="required"
+             [(ngModel)]="book.title"
+             name="title"
+             minlength="3"
+             #title="ngModel"/>
+<!--      <div class="alert-danger" *ngIf="f.submitted && title.invalid">-->
+        <div *ngIf="title.errors.required">Username is required</div>
+        <div *ngIf="title.errors.minlength">
+          Username must be at least 3 characters
+        </div>
+<!--      </div>-->
+    </div>
+
+    <div class="form-group">
+      <label for="author">Author</label>
+      <input type="text"
+             class="form-control"
+             id="author"
+             placeholder="author"
+             name="author"
+             [(ngModel)]="book.authors"
+             #author="ngModel"/>
+<!--      <div class="alert-danger" *ngIf="f.submitted && author.invalid">-->
+<!--      </div>-->
+    </div>
+
+    <div class="form-group">
+      <label for="author">ISBN</label>
+      <input type="text"
+             class="form-control"
+             id="isbn"
+             placeholder="isbn"
+             name="isbn"
+             [(ngModel)]="book.isbn"
+             #isbn="ngModel">
+<!--      <div class="alert-danger" *ngIf="f.submitted && isbn.invalid">-->
+        <div *ngIf="isbn.errors.required">Username is required</div>
+        <div *ngIf="isbn.errors.minlength">
+          Username must be at least 3 characters
+        </div>
+        <div *ngIf="isbn.errors.maxlength">
+          Username must be at most 20 characters
+        </div>
+<!--      </div>-->
+    </div>
+
+    <div class="form-group">
+      <label for="copies">No of Copies</label>
+      <input type="text"
+             class="form-control"
+             id="copies"
+             placeholder="copies"
+             required="required"
+             name="copies"
+             minlength="1"
+             [(ngModel)]="book.noOfCopies"
+             #copies="ngModel"/>
+<!--      <div class="alert-danger" *ngIf="f.submitted && copies.invalid">-->
+        <div *ngIf="copies.errors.required">Username is required</div>
+        <div *ngIf="copies.errors.minlength">
+          Number of copies must be at least 1
+        </div>
+<!--      </div>-->
+    </div>
+
+    <br>
+    <div class="form-group">
+      <input type="file" (change)="onFileChanged($event)">
+      <img [src]="imgURL" height="200" width="200" *ngIf="imgURL">
+    </div>
+
+    <br>
+    <button type="button" class="btn btn-success" (click)="saveBook()">Save Book</button>
+  </form>
+</div>
+
