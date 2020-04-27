@@ -1,6 +1,8 @@
 package com.devni.tlp.finalproject.reservationservice.service;
 
+import com.devni.tlp.finalproject.reservationservice.ReservationServiceApplication;
 import com.devni.tlp.finalproject.reservationservice.model.Lending;
+import com.devni.tlp.finalproject.reservationservice.model.Reservation;
 import com.devni.tlp.finalproject.reservationservice.repository.LendingRepository;
 import com.devni.tlp.finalproject.reservationservice.shared_model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +36,35 @@ public class LendingServiceImpl implements LendingService {
      */
     @Override
     public Lending saveLending(Lending lending) throws Exception {
-        if (getBook(lending.getBookId()).getNoOfCopies() != 0) {
-            updateLentBook(lending.getBookId());
-            return lendingRepository.save(lending);
+        System.out.println("lending 1");
+        if (fetchLentBooksByUserId(lending.getUserId()).size() <= ReservationServiceApplication.MAX_BOOKS_TO_LEND) {
+            if (getBook(lending.getBookId()).getNoOfCopies() != 0) { // copies available
+                System.out.println("lending 2: copies = " + getBook(lending.getBookId()).getNoOfCopies() + " id = " + getBook(lending.getBookId()));
+                if (getReservations(lending.getBookId()).size() == 0) { //no reservations
+                    System.out.println("lending 3: no of reservtions = " + getReservations(lending.getBookId()).size());
+                    updateLentBook(lending.getBookId());
+                    return lendingRepository.save(lending);
+
+                } else if (getReservations(lending.getBookId()).contains(lending.getUserId())) { //available reservations
+                    System.out.println("lending 4: is user in reserved list? " + getReservations(lending.getBookId()).contains(lending.getUserId()));
+                    if (getReservations(lending.getBookId()).get(0).getUserId() == lending.getUserId()) {
+                        System.out.println("lending 5: 1st reserved user = " + getReservations(lending.getBookId()).get(0).getUserId());
+                        System.out.println("lending 6: current user = " + lending.getUserId());
+                        //here you have to check the logged user's id
+                        updateLentBook(lending.getBookId());
+                        return lendingRepository.save(lending);
+
+                    } else {
+                        throw new Exception("1 You have to wait in the reservation list to borrow this book");
+                    }
+                } else {
+                    throw new Exception("2 Book is not available. You can reserve this book");
+                }
+            } else {
+                throw new Exception("3 Book is not available. You can reserve this book");
+            }
         } else {
-            throw new Exception("Book is Out of Stock");
+            throw new Exception("4 Sorry..You can't lend more than 2 books");
         }
     }
 
@@ -62,6 +88,14 @@ public class LendingServiceImpl implements LendingService {
     private Book getBook(Integer bookId) {
         Book book = restTemplate.getForObject("http://localhost:8888/book/getbyid/" + bookId, Book.class);
         return book;
+    }
+
+    private List<Reservation> getReservations(Integer bookId) {
+//        ReservationService reservationService = new ReservationServiceImpl();
+//        return reservationService.fetchReservationsByBookId(bookId);
+        List<Reservation> reservations = (List<Reservation>) restTemplate.getForObject("http://localhost:9191/reserve/getbybookid/" + bookId, Reservation.class);
+        System.out.println("getReservations = " + reservations.size());
+        return reservations;
     }
 
     /**

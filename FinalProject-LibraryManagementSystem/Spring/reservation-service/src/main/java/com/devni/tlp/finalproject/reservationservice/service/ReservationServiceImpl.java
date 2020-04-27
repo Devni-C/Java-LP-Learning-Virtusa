@@ -1,10 +1,13 @@
 package com.devni.tlp.finalproject.reservationservice.service;
 
-import com.devni.tlp.finalproject.reservationservice.model.Lending;
+import com.devni.tlp.finalproject.reservationservice.ReservationServiceApplication;
 import com.devni.tlp.finalproject.reservationservice.model.Reservation;
 import com.devni.tlp.finalproject.reservationservice.repository.ReservationRepository;
+import com.devni.tlp.finalproject.reservationservice.shared_model.Book;
+import com.devni.tlp.finalproject.reservationservice.shared_model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +19,14 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     ReservationRepository reservationRepository;
 
+//    @Bean
+//    RestTemplate getRestTemplate(RestTemplateBuilder builder) {
+//        return builder.build();
+//    }
+
+    @Autowired
+    RestTemplate restTemplate;
+
     /**
      * save new book reservation
      *
@@ -23,8 +34,19 @@ public class ReservationServiceImpl implements ReservationService {
      * @return
      */
     @Override
-    public Reservation saveReservation(Reservation reservation) {
-        return reservationRepository.save(reservation);
+    public Reservation saveReservation(Reservation reservation) throws Exception {
+        if (fetchReservationsByUserId(reservation.getUserId()).size() <= ReservationServiceApplication.MAX_BOOKS_TO_RESERVE) {
+            return reservationRepository.save(reservation);
+        } else {
+            throw new Exception("You can't reserve more than 5 books");
+        }
+    }
+
+    @Override
+    public Reservation deleteReservation(int id) {
+        Reservation reservation = fetchReservationById(id);
+        reservationRepository.delete(reservation);
+        return reservation;
     }
 
     /**
@@ -37,7 +59,6 @@ public class ReservationServiceImpl implements ReservationService {
     public Reservation fetchReservationById(Integer id) {
         Optional<Reservation> optional = reservationRepository.findById(id);
         if (optional.isPresent()) {
-            System.out.println("test get by id");
             return optional.get();
         }
         return null;
@@ -61,8 +82,32 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public List<Reservation> fetchReservationsByBookId(Integer bookId) {
-        return null;
+//    public Reservation fetchReservationsByBookId(Integer bookId) {
+//        Optional<Reservation> reservation = reservationRepository.findById(bookId);
+
+//        List<Reservation> reservations = restTemplate.getForObject();
+
+        return reservationRepository.findAll().stream()
+                .filter(reservation -> reservation.getBookId() == bookId)
+                .collect(Collectors.toList());
     }
+
+    @Override
+    public Book getBook(int bookId) {
+        Book book = restTemplate.getForObject("http://localhost:8888/book/getbyid/" + bookId, Book.class);
+        return book;
+    }
+
+    @Override
+    public User getUser(int userId) {
+        User user = restTemplate.getForObject("http://localhost:7788//api/test/getuserbyid/" + userId, User.class);
+        return user;
+    }
+
+    /*private Author getAuthor(int authorId) {
+        Author author = restTemplate.getForObject("http://" + authorId, Author.class);
+        return author;
+    }*/
 
     /**
      * fetch reservations by user id
@@ -76,24 +121,4 @@ public class ReservationServiceImpl implements ReservationService {
                 .filter(reservation -> reservation.getUserId() == userId)
                 .collect(Collectors.toList());
     }
-
-
-
-/**
- * fetch reserved book by userID
- *
- * @param uid
- * @return
- */
-    /*@Override
-    public List<Reservation> getReservationsByBookId(Integer uid) {
-        return reservationRepository.findAll().stream()
-                .filter(reservation -> reservation.getUser().getId() == uid)
-                .collect(Collectors.toList());
-    }*/
-
-//    @Override
-//    public List<Reservation> getReservationsByBookId(int id) {
-//        return reservationRepository.get
-//    }
 }

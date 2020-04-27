@@ -7,6 +7,8 @@ public class User {
     private Integer id;
 
     private String name;
-    private String NIC;
+//    private String NIC;
+    private String username;
     private String mobile;
+    private boolean isDeleted;
 }

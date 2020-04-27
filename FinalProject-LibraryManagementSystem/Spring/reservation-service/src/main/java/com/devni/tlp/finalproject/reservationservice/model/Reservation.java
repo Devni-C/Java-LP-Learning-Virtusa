@@ -1,11 +1,10 @@
 package com.devni.tlp.finalproject.reservationservice.model;
 
+import com.devni.tlp.finalproject.reservationservice.shared_model.Book;
+import com.devni.tlp.finalproject.reservationservice.shared_model.User;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
@@ -19,6 +18,9 @@ public class Reservation {
     private Integer bookId;
     private Integer userId;
 
-//    duration dates
+    @Transient
+    private Book[] books;
 
+    @Transient
+    private User[] users;
 }

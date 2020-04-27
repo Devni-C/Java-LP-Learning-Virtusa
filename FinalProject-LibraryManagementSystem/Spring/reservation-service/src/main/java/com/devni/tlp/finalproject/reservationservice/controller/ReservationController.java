@@ -1,8 +1,9 @@
 package com.devni.tlp.finalproject.reservationservice.controller;
 
 import com.devni.tlp.finalproject.reservationservice.model.Reservation;
-import com.devni.tlp.finalproject.reservationservice.repository.ReservationRepository;
 import com.devni.tlp.finalproject.reservationservice.service.ReservationService;
+import com.devni.tlp.finalproject.reservationservice.shared_model.Book;
+import com.devni.tlp.finalproject.reservationservice.shared_model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +17,14 @@ public class ReservationController {
     ReservationService reservationService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public Reservation save(@RequestBody Reservation reservation) {
+    public Reservation save(@RequestBody Reservation reservation) throws Exception {
         reservation.setReservedDate(Instant.now());
         return reservationService.saveReservation(reservation);
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    public Reservation delete(@PathVariable int id) {
+        return reservationService.deleteReservation(id);
     }
 
     @RequestMapping("/getbyid/{id}")
@@ -41,5 +47,13 @@ public class ReservationController {
         return reservationService.fetchReservationsByUserId(userId);
     }
 
-//    isAvailable,
+    @RequestMapping("/getbook/{bookId}")
+    public Book getBookNameById(@PathVariable Integer bookId) {
+        return reservationService.getBook(bookId);
+    }
+
+    @RequestMapping("/getUser/{userId}")
+    public User getUserNameById(@PathVariable Integer userId) {
+        return reservationService.getUser(userId);
+    }
 }
