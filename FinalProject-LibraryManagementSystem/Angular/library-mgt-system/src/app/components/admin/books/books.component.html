@@ -1,1 +1,32 @@
-<!--<p>books works!</p>-->
+<h1>Books Admin</h1>
+<a class="btn btn-primary mb-3" (click)="addBook()">Add New Book</a>
+<div class="container row">
+  <div class="col-md-6">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Book Name</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let book of books">
+        <td>{{book.id}}</td>
+        <td>{{book.title}}</td>
+        <td>
+          <button type="button" class="btn btn-primary" (click)="viewBook(book.id)">Show Details</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-6">
+    View Book Details/Add Book
+    <app-add-book *ngIf="action === 'edit' || action === 'add'" [book]="selectedBook" (bookAddedEvent)="refreshData()"></app-add-book>
+    <app-view-books *ngIf="action === 'view'" [book]="selectedBook" (bookDeletedEvent)="refreshData()"></app-view-books>
+  </div>
+</div>
+
+
+
