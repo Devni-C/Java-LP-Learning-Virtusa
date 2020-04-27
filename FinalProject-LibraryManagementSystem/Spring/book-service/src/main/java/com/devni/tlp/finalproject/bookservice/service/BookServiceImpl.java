@@ -1,6 +1,9 @@
 package com.devni.tlp.finalproject.bookservice.service;
 
 import com.devni.tlp.finalproject.bookservice.BookServiceApplication;
+import com.devni.tlp.finalproject.bookservice.exception.BookExistException;
+import com.devni.tlp.finalproject.bookservice.exception.BookNotFoundException;
+import com.devni.tlp.finalproject.bookservice.model.Author;
 import com.devni.tlp.finalproject.bookservice.model.Book;
 import com.devni.tlp.finalproject.bookservice.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +26,24 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public Book saveBook(Book book) {
-        book.setDeleted(false);
-        book.setCreatedAt(Instant.now());
-        book.setUpdatedAt(Instant.now());
-        return bookRepository.save(book);
+    public Book saveBook(Book book) throws BookExistException {
+        if (getBookByISBN(book.getISBN())) {
+            book.setDeleted(false);
+            book.setCreatedAt(Instant.now());
+            book.setUpdatedAt(Instant.now());
+            return bookRepository.save(book);
+        } else {
+            throw new BookExistException("This book exists in the db, you can change the no of copies");
+        }
+    }
+
+    private boolean getBookByISBN(String isbn) {
+        List<Book> books = fetchAllBooks().stream()
+                .filter(book -> book.getISBN().equals(isbn))
+                .collect(Collectors.toList());
+        if (books.size() == 0)
+            return true;
+        return false;
     }
 
     /**
@@ -37,11 +53,15 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public Book updateBook(int bookId) {
-        Book book = fetchBookById(bookId);
-        book.setNoOfCopies(book.getNoOfCopies() - BookServiceApplication.MAX_LENT_BOOKS);
-        book.setUpdatedAt(Instant.now());
-        return bookRepository.saveAndFlush(book);
+    public Book updateBook(int bookId) throws BookNotFoundException {
+        try {
+            Book book = fetchBookById(bookId);
+            book.setNoOfCopies(book.getNoOfCopies() - BookServiceApplication.MAX_LENT_BOOKS);
+            book.setUpdatedAt(Instant.now());
+            return bookRepository.saveAndFlush(book);
+        } catch (Exception e) {
+            throw new BookNotFoundException("Book is not found", e);
+        }
     }
 
     /**
@@ -52,11 +72,18 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public Book removeBook(int bookId) {
+    public Book removeBook(int bookId) throws BookNotFoundException {
         Book book = fetchBookById(bookId);
         book.setDeleted(true);
 
         return bookRepository.saveAndFlush(book);
+    }
+
+    @Override
+    public Book deleteById(int bookId) throws BookNotFoundException {
+        Book book = fetchBookById(bookId);
+        bookRepository.delete(book);
+        return book;
     }
 
     /**
@@ -66,7 +93,7 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public Book returnBook(int bookId) {
+    public Book returnBook(int bookId) throws BookNotFoundException {
         Book book = fetchBookById(bookId);
         book.setNoOfCopies(book.getNoOfCopies() + BookServiceApplication.MAX_LENT_BOOKS);
         book.setUpdatedAt(Instant.now());
@@ -117,22 +144,32 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public Book fetchBookById(int id) {
-        Optional<Book> optional = bookRepository.findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
+    public Book fetchBookById(int id) throws BookNotFoundException {
+        try {
+            Optional<Book> optional = bookRepository.findById(id);
+            if (optional.isPresent()) {
+                return optional.get();
+            }
+            return null;
+        } catch (Exception e) {
+            throw new BookNotFoundException("Book does not exist, Please & Try again", e);
+        }
+    }
+
+    private Integer findByAuthorName(String name) {
+        List<Book> books = fetchAllBooks();
+        System.out.println("1 test Authors: " + books.size());
+        for (int i = 0; i < books.size(); i++) {
+            System.out.println("2 test Authors:");
+            List<Author> authorNames = books.get(i).getAuthors();
+            System.out.println("test Authors: " + books.size());
+            for (int j = 0; j < authorNames.size(); j++) {
+                if (authorNames.get(j).getName().equals(name)) {
+                    return authorNames.get(j).getId();
+                } else
+                    return null;
+            }
         }
         return null;
     }
-
-    /*private boolean findByAuthorName(List<String> name) {
-        fetchAllBooks().stream()
-//                .filter(book -> book.getAuthors().equals(name));
-                .filter(book -> book.getAuthors().forEach(author -> {
-                    if(name.equals(author))
-                        return true;
-                }));
-
-        */
 }
-
