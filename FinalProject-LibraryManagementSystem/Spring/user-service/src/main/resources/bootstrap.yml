@@ -1,0 +1,9 @@
+server:
+  port: 7788
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+spring:
+  application:
+    name: user-service

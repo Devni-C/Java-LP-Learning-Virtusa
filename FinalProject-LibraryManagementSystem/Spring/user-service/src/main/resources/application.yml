@@ -1,8 +1,8 @@
 server:
-  port: 8181
+  port: 7788
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/userDb?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/libuser?createDatabaseIfNotExist=true
     username: root
     password: 123
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -10,6 +10,6 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      ddl-auto: create
+      ddl-auto: update
 
 
