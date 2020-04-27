@@ -1,43 +1,48 @@
 <!-- navbar -->
-<nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Logo</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/home">HOME</a></li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">BOOKS
-            <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Sub Topic 1</a></li>
-            <li><a href="#">Sub Topic 2</a></li>
-            <li><a href="#">Sub Topic 3</a></li>
-          </ul>
-        </li>
-        <li><a href="/users">PROFILE</a></li>
-        <li><a href="/login">LOGIN</a></li>
-        <li><a href="/signup">SIGNUP</a></li>
+<header>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">L I B R A R Y</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right" routerLinkActive="active">
+          <li><a href="/home" routerLink="home">HOME</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="/books">BOOKS
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/view-books">All Books</a></li>
+              <li *ngIf="showUserBoard"><a href="/books">My Books</a></li>
+              <li *ngIf="showAdminBoard"><a href="/add-book">Add Books</a></li>
+              <li *ngIf="showAdminBoard"><a href="/book">Books!!!</a></li>
+            </ul>
+          </li>
+          <li *ngIf="showAdminBoard"><a href="/users">USERS</a></li>
 
-        <li><a href="#"><span class="glyphicon glyphicon-search"></span></a></li>
-      </ul>
-      <form class="navbar-form navbar-right" role="search">
-        <div class="form-group input-group">
-          <input type="text" class="form-control" placeholder="Search..">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button">
+          <li *ngIf="!isLoggedIn"><a href="/signup" routerLink="signup">SIGNUP</a></li>
+          <li *ngIf="!isLoggedIn"><a href="/login" routerLink="login">LOGIN</a></li>
+
+          <li *ngIf="isLoggedIn"><a href="/profile" routerLink="profile">{{ username }}</a></li>
+          <li *ngIf="isLoggedIn"><a href (click)="logout()">LOGOUT</a></li>
+        </ul>
+        <!--<form class="navbar-form navbar-right" role="search">
+          <div class="form-group input-group">
+            <input type="text" class="form-control" placeholder="Search..">
+            <span class="input-group-btn">
+        r    <button class="btn btn-default" type="button">
               <span class="glyphicon glyphicon-search"></span>
             </button>
           </span>
-        </div>
-      </form>
+          </div>
+        </form>-->
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+</header>
