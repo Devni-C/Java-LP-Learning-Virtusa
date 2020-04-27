@@ -1,0 +1,59 @@
+<p>add-user works!</p>
+<h1>Add User</h1>
+<div class="login-form">
+  <form #receivedUser="ngForm">
+
+    <label for="name">Name</label>
+    <div class="form-group">
+      <input type="text"
+             class="form-control"
+             id="name"
+             placeholder="Name"
+             [(ngModel)]="user.name"
+             name="name">
+    </div>
+
+    <label for="role">Role</label>
+    <div class="form-group">
+      <input type="text"
+             class="form-control"
+             id="role"
+             placeholder="User Role"
+             [(ngModel)]="user.role"
+             name="role">
+    </div>
+
+    <label for="password">Password</label>
+    <div class="form-group">
+      <input type="password"
+             class="form-control"
+             id="password"
+             placeholder="Password"
+             [(ngModel)]="user.password"
+             name="password">
+    </div>
+
+    <label for="email">Email</label>
+    <div class="form-group">
+      <input type="text"
+             class="form-control"
+             id="email"
+             placeholder="Email"
+             [(ngModel)]="user.email"
+             name="email">
+    </div>
+
+    <label for="mobile">Mobile</label>
+    <div class="form-group">
+      <input type="text"
+             class="form-control"
+             id="mobile"
+             placeholder="Mobile"
+             [(ngModel)]="user.mobile"
+             name="email">
+    </div>
+
+    <br>
+    <button type="button" class="btn btn-success" (click)="addUser()">Save</button>
+  </form>
+</div>
