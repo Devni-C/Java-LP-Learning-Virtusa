@@ -1,12 +1,11 @@
 package com.devni.tlp.finalproject.userservice.service;
 
 import com.devni.tlp.finalproject.userservice.model.User;
-import com.devni.tlp.finalproject.userservice.model.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
-    User save(UserDTO user) throws Exception;
+//    User updateUser(User user) throws Exception, UserExistException;
 
     List<User> fetchAllUsers();
 

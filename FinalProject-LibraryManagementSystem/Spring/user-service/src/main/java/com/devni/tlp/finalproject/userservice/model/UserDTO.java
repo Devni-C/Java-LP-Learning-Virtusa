@@ -38,4 +38,12 @@ public class UserDTO {
     private boolean isDeleted;
     private Instant createdAt;
     private Instant updatedAt;
+
+    public Set<String> getRole() {
+        return this.role;
+    }
+
+    public void setRole(Set<String> role) {
+        this.role = role;
+    }
 }

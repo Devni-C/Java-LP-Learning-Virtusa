@@ -2,8 +2,10 @@ package com.devni.tlp.finalproject.userservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
+@EnableEurekaClient
 public class UserServiceApplication {
 	public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 5 * 60 * 60;
 	public static final String TOKEN_PREFIX = "Bearer ";

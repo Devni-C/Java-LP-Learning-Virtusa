@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,15 +79,18 @@ public class AuthenticationController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getName(),
+                signUpRequest.getMobile(),
+                true, false, Instant.now(), Instant.now());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles.size() == 0) {
+//        if (strRoles.size() == 0) {
+        if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RoleNotFoundException("Error: Role is not found."));
             roles.add(userRole);
@@ -100,6 +104,10 @@ public class AuthenticationController {
                     Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                             .orElseThrow(() -> new RoleNotFoundException("Error: Role is not found."));
                     roles.add(userRole);
+                } else if (role.toLowerCase().equals("mod")) {
+                    Role userRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                            .orElseThrow(() -> new RoleNotFoundException("Error: Role is not found."));
+                    roles.add(userRole);
                 } else {
                     Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                             .orElseThrow(() -> new RoleNotFoundException("Error: Role is not found."));
@@ -107,6 +115,13 @@ public class AuthenticationController {
                 }
             });
         }
+       /*
+        user.setName(user.getName());
+        user.setMobile(user.getMobile());
+        user.setDeleted(false);
+        user.setActive(true);
+        user.setCreatedAt(Instant.now());
+        user.setUpdatedAt(Instant.now());*/
 
         user.setRoles(roles);
         System.out.println("roles: " + roles.size());
