@@ -1,32 +1,136 @@
 <!--<p>signup works!</p>-->
 <div class="signup-form">
-  <form action="/examples/actions/confirmation.php" method="post">
+  <form action="/examples/actions/confirmation.php" method="post"
+        *ngIf="!isSuccessful"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate>
     <h2>Register</h2>
     <p class="hint-text">Create your account. It's free and only takes a minute.</p>
+
+    <img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="profile-img-card"
+    />
+
     <div class="form-group">
-      <input type="text" class="form-control" name="first_name" placeholder="Name" required="required">
+      <input type="text"
+             class="form-control"
+             name="username"
+             [(ngModel)]="form.username"
+             placeholder="Username"
+             required="required"
+             maxlength="20"
+             minlength="3"
+             #username="ngModel"/>
+      <div class="alert-danger" *ngIf="f.submitted && username.invalid">
+        <div *ngIf="username.errors.required">Username is required</div>
+        <div *ngIf="username.errors.minlength">
+          Username must be at least 3 characters
+        </div>
+        <div *ngIf="username.errors.maxlength">
+          Username must be at most 20 characters
+        </div>
+      </div>
     </div>
     <div class="form-group">
-      <input type="email" class="form-control" name="email" placeholder="Email" required="required">
+      <input type="email"
+             class="form-control"
+             name="email"
+             [(ngModel)]="form.email"
+             placeholder="Email"
+             required="required"
+             #email="ngModel"/>
+      <div class="alert-danger" *ngIf="f.submitted && email.invalid">
+        <div *ngIf="email.errors.required">Email is required</div>
+        <div *ngIf="email.errors.email">
+          Email must be a valid email address
+        </div>
+      </div>
     </div>
     <div class="form-group">
-      <input type="nic" class="form-control" name="nic" placeholder="NIC" required="required">
+      <input type="name"
+             class="form-control"
+             name="name"
+             placeholder="name"
+             required="required"
+             [(ngModel)]="form.name"
+             #name="ngModel"/>
+      <div class="alert-danger" *ngIf="f.submitted && name.invalid">
+        <div *ngIf="name.errors.required">Name is required</div>
+        <div *ngIf="name.errors.minlength">
+          Name must be at least 3 characters
+        </div>
+        <div *ngIf="name.errors.maxlength">
+          Username must be at most 100 characters
+        </div>
+      </div>
     </div>
     <div class="form-group">
-      <input type="mobile" class="form-control" name="mobile" placeholder="Mobile" required="required">
+      <input type="mobile"
+             class="form-control"
+             name="mobile"
+             [(ngModel)]="form.mobile"
+             placeholder="Mobile"
+             required="required"
+             maxlength="10"
+             #mobile="ngModel"
+      />
+      <div class="alert-danger" *ngIf="f.submitted && mobile.invalid">
+        <div *ngIf="mobile.errors.required">Mobile Number is required</div>
+        <div *ngIf="mobile.errors.maxlength">
+          Please enter a 10 digit mobile number
+        </div>
+      </div>
     </div>
     <div class="form-group">
-      <input type="password" class="form-control" name="password" placeholder="Password" required="required">
+      <input type="password"
+             class="form-control"
+             name="password"
+             [(ngModel)]="form.password"
+             placeholder="Password"
+             required="required"
+             minlength="6"
+             #password="ngModel"/>
+      <div class="alert-danger" *ngIf="f.submitted && password.invalid">
+        <div *ngIf="password.errors.required">Password is required</div>
+        <div *ngIf="password.errors.minlength">
+          Password must be at least 6 characters
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
-    </div>
-    <div class="form-group">
-      <label class="checkbox-inline"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
-    </div>
+    <!--   <div class="form-group">
+         <input type="password"
+                class="form-control"
+                name="confirm_password"
+                [(ngModel)]="form.confirm_password"
+                placeholder="Confirm Password"
+                required="required"
+                minlength="6"
+                #confirm_password="ngModel"/>
+         <div class="alert alert-danger" *ngIf="confirm_password.touched && confirm_password.invalid">
+           <div *ngIf="confirm_password.errors.required">Password is required.</div>
+           <div *ngIf="confirm_password.errors.confirmedValidator">Password and Confirm Password must be match.</div>
+         </div>
+         &lt;!&ndash;<div class="alert-danger" *ngIf="f.submitted && confirm_password.invalid">
+           <div *ngIf="confirm_password.errors.required">Password is required</div>
+         </div>&ndash;&gt;
+       </div>-->
+    <!--   <div class="form-group">
+         <label class="checkbox-inline"><input type="checkbox" required="required"> I accept the <a href="#">Terms of
+           Use</a> &amp; <a href="#">Privacy Policy</a></label>
+       </div>-->
     <div class="form-group">
       <button type="submit" class="btn btn-success btn-lg btn-block">Register Now</button>
     </div>
+    <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+      Signup failed!<br/>{{ errorMessage }}
+    </div>
   </form>
-  <div class="text-center">Already have an account? <a href="#">Sign in</a></div>
+  <div class="alert alert-success" *ngIf="isSuccessful">
+    Your registration is successful!
+  </div>
+  <div class="text-center">Already have an account? <a href="/login">Sign in</a></div>
 </div>
