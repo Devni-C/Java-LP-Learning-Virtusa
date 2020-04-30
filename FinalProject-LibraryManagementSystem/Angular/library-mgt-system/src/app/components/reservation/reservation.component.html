@@ -1,0 +1,38 @@
+<p>reservation works!</p>
+
+
+<div class="container">
+  <h2>Reserved Books Details</h2>
+  <button type="button" class="btn btn-primary" (click)="refreshData()">Show Reserved Books</button>
+  <!--  <p>Combine .table-dark and .table-striped to create a dark, striped table:</p>-->
+  <div class="container row">
+    <div class="col-md-6">
+      <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+          <th>Reservation ID</th>
+         <th>Book Name</th>
+          <th>User Name</th>
+          <!--<th>Reserved Date</th>
+          <th></th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let res of reserve">
+          <td>{{res.id}}</td>
+          <td>{{viewReservedUser(res.id)}}</td>
+         <td>{{viewReservedBook(res.id)}}</td>
+<!--          <td>{{}}</td>-->
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="col-md-6">
+  <!--  Display User Details and Add user here.-->
+  <!--  <div (click)="refreshData()"></div>-->
+  <!--  <app-view-users *ngIf="action === 'view'" [user]="selectedUser" (userDeletedEvent)="refreshData()"></app-view-users>-->
+</div>
+
+
