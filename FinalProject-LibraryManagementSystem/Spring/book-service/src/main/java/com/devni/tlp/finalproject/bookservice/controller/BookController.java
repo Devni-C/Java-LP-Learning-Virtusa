@@ -24,7 +24,7 @@ public class BookController {
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Book save(@RequestBody Book book) throws BookExistException {
-        book.setPicByte(this.bytes);
+//        book.setPicByte(this.bytes);
         return bookService.saveBook(book);
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reserve")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ReservationController {
     @Autowired
     ReservationService reservationService;
@@ -55,5 +56,15 @@ public class ReservationController {
     @RequestMapping("/getUser/{userId}")
     public User getUserNameById(@PathVariable Integer userId) {
         return reservationService.getUser(userId);
+    }
+
+    @RequestMapping("/getusername/{id}")
+    public String getUsername(@PathVariable Integer id) {
+        return reservationService.getUserName(id);
+    }
+
+    @RequestMapping("/getbookname/{id}")
+    public String getBookname(@PathVariable Integer id) {
+        return reservationService.getUserName(id);
     }
 }

@@ -35,5 +35,5 @@ public class Book {
     private boolean isDeleted;
     private Instant createdAt;
     private Instant updatedAt;
-    private byte[] picByte;
+//    private byte[] picByte;
 }

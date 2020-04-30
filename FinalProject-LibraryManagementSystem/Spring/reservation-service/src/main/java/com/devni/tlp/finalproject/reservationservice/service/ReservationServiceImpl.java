@@ -121,4 +121,14 @@ public class ReservationServiceImpl implements ReservationService {
                 .filter(reservation -> reservation.getUserId() == userId)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public String getUserName(Integer id) {
+        return getUser(fetchReservationById(id).getUserId()).getName();
+    }
+
+    @Override
+    public String getBookName(Integer id) {
+        return getBook(fetchReservationById(id).getBookId()).getTitle();
+    }
 }

@@ -20,7 +20,7 @@ public class UserController {
     UserService userService;
 
     @RequestMapping("/getallusers")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List<User> getAllUsers() {
         return userService.fetchAllUsers();
     }
