@@ -1,6 +1,7 @@
 package com.devni.tlp.finalproject.reservationservice.service;
 
-import com.devni.tlp.finalproject.reservationservice.ReservationServiceApplication;
+import com.devni.tlp.finalproject.reservationservice.exception.BookNotFoundException;
+import com.devni.tlp.finalproject.reservationservice.exception.LendingNotSavedException;
 import com.devni.tlp.finalproject.reservationservice.model.Lending;
 import com.devni.tlp.finalproject.reservationservice.model.Reservation;
 import com.devni.tlp.finalproject.reservationservice.repository.LendingRepository;
@@ -14,6 +15,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.devni.tlp.finalproject.reservationservice.ReservationServiceApplication.BOOK_URL;
+import static com.devni.tlp.finalproject.reservationservice.ReservationServiceApplication.MAX_BOOKS_TO_LEND;
 
 @Service
 public class LendingServiceImpl implements LendingService {
@@ -35,36 +39,30 @@ public class LendingServiceImpl implements LendingService {
      * @return
      */
     @Override
-    public Lending saveLending(Lending lending) throws Exception {
-        System.out.println("lending 1");
-        if (fetchLentBooksByUserId(lending.getUserId()).size() <= ReservationServiceApplication.MAX_BOOKS_TO_LEND) {
+    public Lending saveLending(Lending lending) throws LendingNotSavedException {
+        if (fetchLentBooksByUserId(lending.getUserId()).size() <= MAX_BOOKS_TO_LEND) {
             if (getBook(lending.getBookId()).getNoOfCopies() != 0) { // copies available
-                System.out.println("lending 2: copies = " + getBook(lending.getBookId()).getNoOfCopies() + " id = " + getBook(lending.getBookId()));
-                if (getReservations(lending.getBookId()).size() == 0) { //no reservations
-                    System.out.println("lending 3: no of reservtions = " + getReservations(lending.getBookId()).size());
+                if (getReservations(lending.getBookId()).size() == 0) { // no reservations -> you can get the book
                     updateLentBook(lending.getBookId());
                     return lendingRepository.save(lending);
 
                 } else if (getReservations(lending.getBookId()).contains(lending.getUserId())) { //available reservations
-                    System.out.println("lending 4: is user in reserved list? " + getReservations(lending.getBookId()).contains(lending.getUserId()));
                     if (getReservations(lending.getBookId()).get(0).getUserId() == lending.getUserId()) {
-                        System.out.println("lending 5: 1st reserved user = " + getReservations(lending.getBookId()).get(0).getUserId());
-                        System.out.println("lending 6: current user = " + lending.getUserId());
                         //here you have to check the logged user's id
                         updateLentBook(lending.getBookId());
                         return lendingRepository.save(lending);
 
                     } else {
-                        throw new Exception("1 You have to wait in the reservation list to borrow this book");
+                        throw new LendingNotSavedException("1 You have to wait in the reservation list to borrow this book");
                     }
                 } else {
-                    throw new Exception("2 Book is not available. You can reserve this book");
+                    throw new LendingNotSavedException("2 Book is not available. You can reserve this book");
                 }
             } else {
-                throw new Exception("3 Book is not available. You can reserve this book");
+                throw new LendingNotSavedException("3 Book is not available. You can reserve this book");
             }
         } else {
-            throw new Exception("4 Sorry..You can't lend more than 2 books");
+            throw new LendingNotSavedException("4 Sorry..You can't lend more than 2 books");
         }
     }
 
@@ -75,7 +73,7 @@ public class LendingServiceImpl implements LendingService {
      * @return
      */
     private Book updateLentBook(Integer bookId) {
-        Book book = restTemplate.getForObject("http://localhost:8888/book/update/" + bookId, Book.class);
+        Book book = restTemplate.getForObject(BOOK_URL + "update/" + bookId, Book.class);
         return book;
     }
 
@@ -86,7 +84,7 @@ public class LendingServiceImpl implements LendingService {
      * @return
      */
     private Book getBook(Integer bookId) {
-        Book book = restTemplate.getForObject("http://localhost:8888/book/getbyid/" + bookId, Book.class);
+        Book book = restTemplate.getForObject(BOOK_URL + "getbyid/" + bookId, Book.class);
         return book;
     }
 
@@ -147,11 +145,13 @@ public class LendingServiceImpl implements LendingService {
      * @return
      */
     @Override
-    public Lending fetchLentByBookId(Integer bookId) {
+    public Lending fetchLentByBookId(Integer bookId) throws BookNotFoundException {
         Optional<Lending> lent = lendingRepository.findById(bookId);
         if (lent.isPresent()) {
             return lent.get();
-        } else
-            return null;
+        } else {
+//            return null;
+            throw new BookNotFoundException("Book not found");
+        }
     }
 }

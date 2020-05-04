@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.devni.tlp.finalproject.reservationservice.ReservationServiceApplication.BOOK_URL;
+import static com.devni.tlp.finalproject.reservationservice.ReservationServiceApplication.USER_URL;
+
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
@@ -94,13 +97,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Book getBook(int bookId) {
-        Book book = restTemplate.getForObject("http://localhost:8888/book/getbyid/" + bookId, Book.class);
+        Book book = restTemplate.getForObject(BOOK_URL + "getbyid/" + bookId, Book.class);
         return book;
     }
 
     @Override
     public User getUser(int userId) {
-        User user = restTemplate.getForObject("http://localhost:7788//api/test/getuserbyid/" + userId, User.class);
+        User user = restTemplate.getForObject(USER_URL + "api/test/getuserbyid/" + userId, User.class);
         return user;
     }
 

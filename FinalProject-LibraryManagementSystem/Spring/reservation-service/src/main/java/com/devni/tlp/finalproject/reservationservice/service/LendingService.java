@@ -1,5 +1,6 @@
 package com.devni.tlp.finalproject.reservationservice.service;
 
+import com.devni.tlp.finalproject.reservationservice.exception.BookNotFoundException;
 import com.devni.tlp.finalproject.reservationservice.model.Lending;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface LendingService {
 
     List<Lending> fetchLentBooksByUserId(Integer userId);
 
-    Lending fetchLentByBookId(Integer bookId);
+    Lending fetchLentByBookId(Integer bookId) throws BookNotFoundException;
 
 }

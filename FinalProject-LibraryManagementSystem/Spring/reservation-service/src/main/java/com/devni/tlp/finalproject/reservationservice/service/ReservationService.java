@@ -23,4 +23,7 @@ public interface ReservationService {
 
     User getUser(int userId);
 
+    String getUserName(Integer id);
+
+    String getBookName(Integer id);
 }
